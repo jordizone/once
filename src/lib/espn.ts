@@ -3,8 +3,9 @@ import type { LeagueCode } from "./types";
 const BASE_URL =
   "https://site.api.espn.com/apis/site/v2/sports/soccer";
 
-export function scoreboardUrl(league: LeagueCode): string {
-  return `${BASE_URL}/${league}/scoreboard`;
+export function scoreboardUrl(league: LeagueCode, dates?: string): string {
+  const url = `${BASE_URL}/${league}/scoreboard`;
+  return dates ? `${url}?dates=${dates}` : url;
 }
 
 const WEB_BASE_URL =

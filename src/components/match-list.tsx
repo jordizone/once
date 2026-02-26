@@ -11,9 +11,50 @@ function isBarcaMatch(event: Event): boolean {
   );
 }
 
+function getDateKey(event: Event): string {
+  return new Date(event.date).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function groupByDate(events: Event[]): Map<string, Event[]> {
+  const groups = new Map<string, Event[]>();
+  for (const event of events) {
+    const key = getDateKey(event);
+    const group = groups.get(key);
+    if (group) {
+      group.push(event);
+    } else {
+      groups.set(key, [event]);
+    }
+  }
+  return groups;
+}
+
+function isToday(event: Event): boolean {
+  const d = new Date(event.date);
+  const now = new Date();
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
+}
+
 export function MatchList({ events }: { events: Event[] }) {
-  const barcaMatch = events.find(isBarcaMatch);
-  const otherMatches = events.filter((e) => !isBarcaMatch(e));
+  // Find the most relevant Barça match: live > today > next upcoming > last played
+  const barcaEvents = events.filter(isBarcaMatch);
+  const barcaMatch =
+    barcaEvents.find((e) => e.status.type.state === "in") ??
+    barcaEvents.find((e) => e.status.type.state === "pre" && isToday(e)) ??
+    barcaEvents.find((e) => e.status.type.state === "pre") ??
+    barcaEvents.findLast((e) => e.status.type.state === "post") ??
+    null;
+
+  const otherEvents = events.filter((e) => e !== barcaMatch);
+  const grouped = groupByDate(otherEvents);
 
   return (
     <div className="flex flex-col gap-4 py-4">
@@ -21,14 +62,21 @@ export function MatchList({ events }: { events: Event[] }) {
         <FeaturedMatch event={barcaMatch} />
       ) : (
         <div className="px-4 text-xs text-fg-muted">
-          No FC Barcelona match today
+          No FC Barcelona match this week
         </div>
       )}
 
-      {otherMatches.length > 0 ? (
+      {grouped.size > 0 ? (
         <div className="border-t border-border pt-2">
-          {otherMatches.map((event) => (
-            <MatchRow key={event.id} event={event} />
+          {Array.from(grouped).map(([date, dayEvents]) => (
+            <div key={date}>
+              <div className="px-4 py-1.5 text-[10px] text-fg-muted uppercase tracking-wider">
+                {date}
+              </div>
+              {dayEvents.map((event) => (
+                <MatchRow key={event.id} event={event} />
+              ))}
+            </div>
           ))}
         </div>
       ) : null}
