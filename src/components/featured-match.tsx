@@ -52,6 +52,14 @@ export function FeaturedMatch({ event }: { event: Event }) {
         {isLive ? (
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
         ) : null}
+        <span>
+          {new Date(event.date).toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          })}
+        </span>
+        <span>&middot;</span>
         <span>{status}</span>
         {venue ? (
           <>
