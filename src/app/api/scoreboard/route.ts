@@ -6,13 +6,16 @@ import { LEAGUES } from "@/lib/types";
 export async function GET(request: NextRequest) {
   const league = request.nextUrl.searchParams.get("league") as LeagueCode;
   const dates = request.nextUrl.searchParams.get("dates") ?? undefined;
+  const isPast = request.nextUrl.searchParams.get("past") === "true";
 
   if (!league || !(league in LEAGUES)) {
     return NextResponse.json({ error: "Invalid league" }, { status: 400 });
   }
 
+  const revalidate = isPast ? 86_400 : 30;
+
   const res = await fetch(scoreboardUrl(league, dates), {
-    next: { revalidate: 30 },
+    next: { revalidate },
   });
 
   if (!res.ok) {
@@ -23,5 +26,9 @@ export async function GET(request: NextRequest) {
   }
 
   const data = await res.json();
-  return NextResponse.json(data);
+  return NextResponse.json(data, {
+    headers: {
+      "Cache-Control": `public, max-age=${revalidate}`,
+    },
+  });
 }

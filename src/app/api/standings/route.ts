@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   const res = await fetch(standingsUrl(league), {
-    next: { revalidate: 60 },
+    next: { revalidate: 300 },
   });
 
   if (!res.ok) {
@@ -22,5 +22,9 @@ export async function GET(request: NextRequest) {
   }
 
   const data = await res.json();
-  return NextResponse.json(data);
+  return NextResponse.json(data, {
+    headers: {
+      "Cache-Control": "public, max-age=300",
+    },
+  });
 }
