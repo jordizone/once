@@ -71,6 +71,11 @@ export interface StandingEntry {
     abbreviation: string;
     logos: { href: string }[];
   };
+  note?: {
+    color: string;
+    description: string;
+    rank: number;
+  };
   stats: {
     name: string;
     value: number;

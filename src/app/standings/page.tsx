@@ -49,6 +49,7 @@ export default function Standings() {
             <tbody>
               {entries.map((entry, i) => {
                 const isBarca = entry.team.id === BARCA_ID;
+                const noteColor = entry.note?.color;
                 return (
                   <tr
                     key={entry.team.id}
@@ -56,7 +57,20 @@ export default function Standings() {
                       isBarca ? "bg-highlight/10 font-bold" : ""
                     }`}
                   >
-                    <td className="px-4 py-1.5 text-fg-muted">{i + 1}</td>
+                    <td className="px-4 py-1.5 text-fg-muted">
+                      <div className="flex items-center gap-1.5">
+                        {noteColor ? (
+                          <span
+                            className="inline-block w-1 h-3.5 rounded-sm"
+                            style={{ backgroundColor: noteColor }}
+                            title={entry.note?.description}
+                          />
+                        ) : (
+                          <span className="inline-block w-1" />
+                        )}
+                        {i + 1}
+                      </div>
+                    </td>
                     <td className="px-2 py-1.5">
                       <div className="flex items-center gap-2">
                         {entry.team.logos?.[0]?.href ? (
@@ -88,6 +102,27 @@ export default function Standings() {
               })}
             </tbody>
           </table>
+          {(() => {
+            const zones = new Map<string, string>();
+            for (const entry of entries) {
+              if (entry.note?.description && entry.note?.color) {
+                zones.set(entry.note.description, entry.note.color);
+              }
+            }
+            return zones.size > 0 ? (
+              <div className="flex flex-wrap gap-4 px-4 py-3 text-[10px] text-fg-muted">
+                {Array.from(zones).map(([desc, color]) => (
+                  <div key={desc} className="flex items-center gap-1.5">
+                    <span
+                      className="inline-block w-2 h-2 rounded-sm"
+                      style={{ backgroundColor: color }}
+                    />
+                    <span>{desc}</span>
+                  </div>
+                ))}
+              </div>
+            ) : null;
+          })()}
         </div>
       )}
     </div>
