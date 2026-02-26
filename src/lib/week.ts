@@ -9,9 +9,10 @@ function formatDate(d: Date): string {
 export function getWeekRange(): string {
   const now = new Date();
   const day = now.getDay();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((day + 6) % 7));
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  return `${formatDate(monday)}-${formatDate(sunday)}`;
+  // Friday = 5. Offset so Friday is day 0 of the range.
+  const friday = new Date(now);
+  friday.setDate(now.getDate() - ((day + 2) % 7));
+  const thursday = new Date(friday);
+  thursday.setDate(friday.getDate() + 6);
+  return `${formatDate(friday)}-${formatDate(thursday)}`;
 }
