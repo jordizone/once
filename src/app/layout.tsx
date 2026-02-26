@@ -28,6 +28,9 @@ export default function RootLayout({
                 var t = localStorage.getItem('theme');
                 var d = t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
                 if (d) document.documentElement.classList.add('dark');
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.register('/sw.js');
+                }
               })();
             `,
           }}
