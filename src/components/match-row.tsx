@@ -27,13 +27,17 @@ export function MatchRow({ event }: { event: Event }) {
   return (
     <div className="flex items-center justify-between px-4 py-1.5 text-xs hover:bg-bg-secondary">
       <div className="flex items-center gap-2 min-w-0">
-        <span className="w-[80px] text-right truncate">
-          {home.team.abbreviation}
-        </span>
+        <div className="flex items-center gap-1.5 w-[100px] justify-end">
+          <span className="truncate">{home.team.abbreviation}</span>
+          <img src={home.team.logo} alt="" className="w-4 h-4" />
+        </div>
         <span className="text-fg-muted w-[50px] text-center">
           {state === "pre" ? "vs" : `${home.score}-${away.score}`}
         </span>
-        <span className="w-[80px] truncate">{away.team.abbreviation}</span>
+        <div className="flex items-center gap-1.5 w-[100px]">
+          <img src={away.team.logo} alt="" className="w-4 h-4" />
+          <span className="truncate">{away.team.abbreviation}</span>
+        </div>
       </div>
       <div className="flex items-center gap-1.5">
         {isLive ? (

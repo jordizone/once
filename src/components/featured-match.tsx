@@ -30,9 +30,10 @@ export function FeaturedMatch({ event }: { event: Event }) {
   return (
     <div className="border border-border p-4 mx-4">
       <div className="flex items-center justify-center gap-4 text-lg">
-        <span className="text-right min-w-[140px] truncate">
-          {home.team.displayName}
-        </span>
+        <div className="flex items-center gap-2 min-w-[140px] justify-end">
+          <span className="truncate">{home.team.displayName}</span>
+          <img src={home.team.logo} alt="" className="w-6 h-6" />
+        </div>
         <span className="text-fg-muted text-sm">
           {event.status.type.state === "pre" ? (
             "vs"
@@ -42,9 +43,10 @@ export function FeaturedMatch({ event }: { event: Event }) {
             </>
           )}
         </span>
-        <span className="text-left min-w-[140px] truncate">
-          {away.team.displayName}
-        </span>
+        <div className="flex items-center gap-2 min-w-[140px]">
+          <img src={away.team.logo} alt="" className="w-6 h-6" />
+          <span className="truncate">{away.team.displayName}</span>
+        </div>
       </div>
       <div className="text-center text-xs text-fg-muted mt-2 flex items-center justify-center gap-2">
         {isLive ? (

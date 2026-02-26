@@ -57,8 +57,13 @@ export default function Standings() {
                     }`}
                   >
                     <td className="px-4 py-1.5 text-fg-muted">{i + 1}</td>
-                    <td className="px-2 py-1.5 truncate max-w-[180px]">
-                      {entry.team.abbreviation}
+                    <td className="px-2 py-1.5">
+                      <div className="flex items-center gap-2">
+                        {entry.team.logos?.[0]?.href ? (
+                          <img src={entry.team.logos[0].href} alt="" className="w-4 h-4" />
+                        ) : null}
+                        <span className="truncate">{entry.team.abbreviation}</span>
+                      </div>
                     </td>
                     <td className="px-2 py-1.5 text-center">
                       {getStat(entry.stats, "gamesPlayed")}
