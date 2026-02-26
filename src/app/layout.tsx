@@ -11,6 +11,9 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "once",
   description: "FC Barcelona match tracker",
+  icons: {
+    icon: "https://emojicdn.elk.sh/⚽",
+  },
 };
 
 export default function RootLayout({
