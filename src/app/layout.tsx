@@ -9,7 +9,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ONCE",
+  title: "once",
   description: "FC Barcelona match tracker",
 };
 

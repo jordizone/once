@@ -10,7 +10,7 @@ export function Nav() {
   return (
     <nav className="flex items-center justify-between border-b border-border px-4 py-3">
       <div className="flex items-center gap-6">
-        <span className="text-sm font-bold tracking-widest">ONCE</span>
+        <span className="text-sm font-bold tracking-widest">11</span>
         <div className="flex gap-4 text-xs">
           <Link
             href="/"
