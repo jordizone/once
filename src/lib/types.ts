@@ -6,8 +6,6 @@ export const LEAGUES = {
 
 export type LeagueCode = keyof typeof LEAGUES;
 
-export const BARCA_ID = "83";
-
 export interface Competitor {
   id: string;
   team: {

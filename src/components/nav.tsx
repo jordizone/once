@@ -32,6 +32,16 @@ export function Nav() {
           >
             STANDINGS
           </Link>
+          <Link
+            href="/settings"
+            className={
+              pathname === "/settings"
+                ? "text-fg underline underline-offset-4"
+                : "text-fg-muted hover:text-fg"
+            }
+          >
+            SETTINGS
+          </Link>
         </div>
       </div>
       <ThemeToggle />

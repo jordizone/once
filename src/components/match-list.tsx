@@ -1,15 +1,9 @@
 "use client";
 
 import type { Event } from "@/lib/types";
-import { BARCA_ID } from "@/lib/types";
+import { useFavTeam } from "@/lib/fav-team";
 import { FeaturedMatch } from "./featured-match";
 import { MatchRow } from "./match-row";
-
-function isBarcaMatch(event: Event): boolean {
-  return event.competitions[0].competitors.some(
-    (c) => c.team.id === BARCA_ID
-  );
-}
 
 function getDateKey(event: Event): string {
   return new Date(event.date).toLocaleDateString("en-US", {
@@ -44,25 +38,30 @@ function isToday(event: Event): boolean {
 }
 
 export function MatchList({ events }: { events: Event[] }) {
-  // Find the most relevant Barça match: live > today > next upcoming > last played
-  const barcaEvents = events.filter(isBarcaMatch);
-  const barcaMatch =
-    barcaEvents.find((e) => e.status.type.state === "in") ??
-    barcaEvents.find((e) => e.status.type.state === "pre" && isToday(e)) ??
-    barcaEvents.find((e) => e.status.type.state === "pre") ??
-    barcaEvents.findLast((e) => e.status.type.state === "post") ??
+  const [favTeamId] = useFavTeam();
+
+  const isFavMatch = (event: Event) =>
+    event.competitions[0].competitors.some((c) => c.team.id === favTeamId);
+
+  // Find the most relevant fav team match: live > today > next upcoming > last played
+  const favEvents = events.filter(isFavMatch);
+  const featuredMatch =
+    favEvents.find((e) => e.status.type.state === "in") ??
+    favEvents.find((e) => e.status.type.state === "pre" && isToday(e)) ??
+    favEvents.find((e) => e.status.type.state === "pre") ??
+    favEvents.findLast((e) => e.status.type.state === "post") ??
     null;
 
-  const otherEvents = events.filter((e) => e !== barcaMatch);
+  const otherEvents = events.filter((e) => e !== featuredMatch);
   const grouped = groupByDate(otherEvents);
 
   return (
     <div className="flex flex-col gap-4 py-4">
-      {barcaMatch ? (
-        <FeaturedMatch event={barcaMatch} />
+      {featuredMatch ? (
+        <FeaturedMatch event={featuredMatch} />
       ) : (
         <div className="px-4 text-xs text-fg-muted">
-          No FC Barcelona match this week
+          No match for your team this week
         </div>
       )}
 

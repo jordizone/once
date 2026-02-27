@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { LeagueSelector } from "@/components/league-selector";
 import { useStandings } from "@/lib/hooks";
-import { BARCA_ID, type LeagueCode } from "@/lib/types";
+import { useFavTeam } from "@/lib/fav-team";
+import type { LeagueCode } from "@/lib/types";
 
 function getStat(
   stats: { name: string; displayValue: string }[],
@@ -14,6 +15,7 @@ function getStat(
 
 export default function Standings() {
   const [league, setLeague] = useState<LeagueCode>("esp.1");
+  const [favTeamId] = useFavTeam();
   const { data, isLoading, error } = useStandings(league);
 
   const entries = data?.children?.[0]?.standings?.entries ?? [];
@@ -48,7 +50,7 @@ export default function Standings() {
             </thead>
             <tbody>
               {entries.map((entry, i) => {
-                const isBarca = entry.team.id === BARCA_ID;
+                const isBarca = entry.team.id === favTeamId;
                 const noteColor = entry.note?.color;
                 return (
                   <tr
