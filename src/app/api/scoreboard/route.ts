@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { scoreboardUrl } from "@/lib/espn";
+import { ESPN_HEADERS, scoreboardUrl } from "@/lib/espn";
 import type { LeagueCode } from "@/lib/types";
 import { LEAGUES } from "@/lib/types";
 
@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
   const revalidate = isPast ? 86_400 : 30;
 
   const res = await fetch(scoreboardUrl(league, dates), {
+    headers: ESPN_HEADERS,
     next: { revalidate },
   });
 

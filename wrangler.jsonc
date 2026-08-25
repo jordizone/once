@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "once",
+  "compatibility_date": "2026-08-25",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "vinext/server/fetch-handler",
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  // Workers Caching: puts Cloudflare's edge cache in front of the Worker so the
+  // Cache-Control headers set by /api/* route handlers actually take effect.
+  "cache": {
+    "enabled": true
+  },
+  "observability": {
+    "enabled": true
+  },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "once.jordi.zone", "custom_domain": true }
+  ]
+}

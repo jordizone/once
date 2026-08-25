@@ -1,4 +1,4 @@
-const CACHE_NAME = "once-v1";
+const CACHE_NAME = "once-v2";
 const STATIC_ASSETS = ["/", "/standings"];
 
 self.addEventListener("install", (event) => {
@@ -36,7 +36,23 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Cache-first for static assets
+  // Network-first for navigations too: the HTML shell references hashed asset
+  // URLs that change on every deploy, so serving it cache-first pins a build
+  // whose chunks no longer exist. Cache is the offline fallback only.
+  if (request.mode === "navigate") {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || caches.match("/")))
+    );
+    return;
+  }
+
+  // Cache-first for hashed static assets
   event.respondWith(
     caches.match(request).then((cached) => cached || fetch(request))
   );

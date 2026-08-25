@@ -1,0 +1,12 @@
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+  esbuild: true
+  workerd: true
+
+# Equivalent for pnpm 10, in case CI resolves an older pnpm than packageManager pins.
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+  - esbuild
+  - workerd
